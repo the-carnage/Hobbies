@@ -12,3 +12,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 const postRoutes = require('./routes/postRoutes');
 app.use('/api/posts', postRoutes);
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
