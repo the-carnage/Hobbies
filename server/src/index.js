@@ -14,3 +14,5 @@ const postRoutes = require('./routes/postRoutes');
 app.use('/api/posts', postRoutes);
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
+const interactionRoutes = require('./routes/interactionRoutes');
+app.use('/api/interactions', interactionRoutes);
