@@ -1,0 +1,4 @@
+body { font-family: sans-serif; margin: 0; padding: 0; background: #fafafa; }
+.navbar { background: #fff; padding: 1rem; border-bottom: 1px solid #ddd; display: flex; gap: 1rem; }
+.feed-container { max-width: 600px; margin: 2rem auto; }
+.post-card { background: white; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
