@@ -1,4 +1,74 @@
-body { font-family: sans-serif; margin: 0; padding: 0; background: #fafafa; }
-.navbar { background: #fff; padding: 1rem; border-bottom: 1px solid #ddd; display: flex; gap: 1rem; }
-.feed-container { max-width: 600px; margin: 2rem auto; }
-.post-card { background: white; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+:root {
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --bg: #F3F4F6;
+  --card-bg: #FFFFFF;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+}
+body { 
+  font-family: 'Inter', sans-serif; 
+  margin: 0; 
+  padding: 0; 
+  background: var(--bg); 
+  color: var(--text-main);
+}
+.navbar { 
+  background: var(--card-bg); 
+  padding: 1rem 2rem; 
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+.links a { 
+  margin-left: 1.5rem; 
+  text-decoration: none; 
+  color: var(--text-main); 
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.links a:hover { color: var(--primary); }
+.feed-container, .profile-page, .auth-form { 
+  max-width: 600px; 
+  margin: 3rem auto; 
+}
+.post-card, .auth-form, .create-post, .profile-page { 
+  background: var(--card-bg); 
+  padding: 1.5rem; 
+  margin-bottom: 1.5rem; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover { background: var(--primary-hover); }
+.form-group { margin-bottom: 1rem; }
