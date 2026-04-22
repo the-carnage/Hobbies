@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { createPost } from '../../services/api';
 
-export default function CreatePostDialog() {
+export default function CreatePostDialog({ onPostCreated }) {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -12,6 +12,7 @@ export default function CreatePostDialog() {
     try {
       await createPost({ content, userId: 'user123' });
       setContent('');
+      if (onPostCreated) onPostCreated();
       alert("Post created successfully!");
     } catch (err) {
       alert("Failed to create post");
