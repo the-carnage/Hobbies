@@ -1,6 +1,12 @@
-// Mock AWS S3 upload controller
-exports.uploadMedia = async (req, res) => {
-    // Generate S3 url Mock
-    const media_url = "https://mock-s3-bucket.aws.com/image.png"\;
-    return res.status(200).json({ url: media_url });
+class MediaController {
+    async uploadMedia(req, res) {
+        const mediaUrl = 'https://mock-s3-bucket.aws.com/image.png';
+        return res.status(200).json({ url: mediaUrl });
+    }
+}
+
+const controller = new MediaController();
+
+module.exports = {
+    uploadMedia: controller.uploadMedia.bind(controller),
 };
