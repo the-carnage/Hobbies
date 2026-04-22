@@ -2,6 +2,8 @@
 
 Welcome to **Hobbies**, a passion-driven social media platform designed for niche communities, creators, and hobbyists. Connect, share, and explore interests like gardening, sports, arts, and more!
 
+**Live Demo:** [https://hobbies-1-j3kz.onrender.com/](https://hobbies-1-j3kz.onrender.com/) *(Note: The backend is hosted on a free tier and may take ~1 minute to restart/spin up upon first load. Please be patient!)*
+
 ## 🚀 Features
 - **User Authentication**: Secure login and profile management.
 - **Hobby Feeds**: Discover and browse posts related to your passions.
@@ -13,7 +15,7 @@ Welcome to **Hobbies**, a passion-driven social media platform designed for nich
 - **Frontend**: React.js, Next.js (App Router), CSS Modules
 - **Backend**: Node.js, Express.js
 - **Database**: Firebase Firestore
-- **Deployment**: Vercel (Frontend), Render / Railway (Backend)
+- **Deployment**: Render (Frontend & Backend)
 
 ---
 
@@ -35,9 +37,9 @@ npm install
 **Environment Variables (`server/.env`)**
 Create a `.env` file in the `server` directory and add the following:
 ```env
-PORT=5000
+PORT=5001
 # Absolute path to your Firebase Admin SDK service account JSON
-GOOGLE_APPLICATION_CREDENTIALS="/absolute/path/to/firebase-adminsdk.json"
+# Or use FIREBASE_SERVICE_ACCOUNT variable containing stringified JSON for production
 ```
 
 Start the backend server:
@@ -55,9 +57,8 @@ npm install
 ```
 
 **Environment Variables (`client/.env.local`)**
-Create a `.env.local` file in the `client` directory:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
+NEXT_PUBLIC_API_URL=http://localhost:5001/api
 ```
 
 Start the frontend application:
@@ -65,25 +66,17 @@ Start the frontend application:
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
+The application will be available at `http://localhost:3000` or `http://localhost:3001`.
 
 ---
 
-## 🌍 Deployment Guide (Hosting Ready)
+## 🌍 Deployment (Render)
 
-### Frontend (Vercel)
-1. Push your code to GitHub.
-2. Import the project into [Vercel](https://vercel.com/).
-3. Set the Root Directory to `client`.
-4. Add the Environment Variable `NEXT_PUBLIC_API_URL` pointing to your hosted backend URL.
-5. Deploy!
-
-### Backend (Render / Railway)
-1. Connect your GitHub repository to Render or Railway.
-2. Set the Root Directory to `server`.
-3. Build Command: `npm install`
-4. Start Command: `node src/index.js`
-5. Add your `GOOGLE_APPLICATION_CREDENTIALS` logic (Note: For cloud hosting, it is recommended to parse Firebase credentials directly from an environment string instead of a file for easier deployment).
+### Frontend & Backend (Render)
+1. Use the `client` directory for the Frontend Web Service and `server` for the Backend Web Service.
+2. Build commands are `npm install && npm run build` (client) and `npm install` (server).
+3. Start commands are `npm run start` (client) and `npm start` (server).
+4. Add the appropriate environment variables (`NEXT_PUBLIC_API_URL` for the client, `FIREBASE_SERVICE_ACCOUNT` for the server).
 
 ---
 ## 📄 Design Documents
