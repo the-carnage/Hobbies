@@ -13,7 +13,7 @@ export default function CreatePostDialog({ onPostCreated }) {
       await createPost({ content, userId: 'user123' });
       setContent('');
       if (onPostCreated) onPostCreated();
-      alert("Post created successfully!");
+      // alert("Post created successfully!"); // Commented out to prevent blocking alerts
     } catch (err) {
       alert("Failed to create post");
     }

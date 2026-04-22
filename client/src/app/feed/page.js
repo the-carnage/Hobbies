@@ -31,7 +31,7 @@ export default function FeedPage() {
       {loading ? (
         <p>Loading posts...</p>
       ) : posts.length > 0 ? (
-        posts.map(post => <PostCard key={post.id} post={post} />)
+        posts.map(post => <PostCard key={post.id || post.username} post={post} />)
       ) : (
         <p>No posts found. Start sharing your hobby!</p>
       )}
