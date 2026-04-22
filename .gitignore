@@ -6,12 +6,12 @@ yarn-debug.log*
 yarn-error.log*
 firebase-debug.log*
 firebase-debug.*.log*
+lerna-debug.log*
 
 # Firebase cache
 .firebase/
 
 # Firebase config
-
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave
 # it commented so all members can deploy to the same project(s) in .firebaserc.
@@ -64,6 +64,45 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # dataconnect generated files
 .dataconnect
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# AI agent directories (not needed in repo)
+.agents/
+.augment/
+.claude/
+.codebuddy/
+.factory/
+.kiro/
+.qoder/
+.qwen/
+.trae/
+.windsurf/
+
+# Lock files (keep package-lock.json but ignore others)
+yarn.lock
+pnpm-lock.yaml
+
+# Misc
+*.pem
+.vercel
+.turbo

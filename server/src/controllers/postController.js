@@ -8,12 +8,20 @@ exports.createPost = async (req, res) => {
             const postRef = await db.collection('posts').add({
                 content,
                 userId,
+                username: 'user123', // In production, fetch from user profile
+                likes: 0,
                 createdAt: new Date().toISOString()
             });
             return res.status(201).json({ id: postRef.id, message: 'Post created in Firestore' });
         } else {
             // Fallback for local testing without Firebase Keys
-            return res.status(201).json({ id: Date.now(), content, message: 'Mock Post created' });
+            return res.status(201).json({ 
+                id: Date.now(), 
+                content, 
+                username: 'user123',
+                likes: 0,
+                message: 'Mock Post created' 
+            });
         }
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -27,9 +35,38 @@ exports.getFeed = async (req, res) => {
             const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             return res.status(200).json(posts);
         } else {
+            // Mock data for testing without Firebase
             return res.status(200).json([
-                { id: '1', content: 'Planting new seeds! 🌱', username: 'gardener99' },
-                { id: '2', content: 'What a game last night! ⚽', username: 'sports_fanatic' }
+                { 
+                    id: '1', 
+                    content: 'Just planted some beautiful roses in my garden! 🌹 The weather has been perfect for gardening lately.', 
+                    username: 'gardener99',
+                    likes: 24
+                },
+                { 
+                    id: '2', 
+                    content: 'What an incredible game last night! ⚽ That last-minute goal was absolutely stunning!', 
+                    username: 'sports_fanatic',
+                    likes: 18
+                },
+                { 
+                    id: '3', 
+                    content: 'Finished my latest watercolor painting today. Art really helps me relax after a long day. 🎨', 
+                    username: 'artlover_jane',
+                    likes: 32
+                },
+                { 
+                    id: '4', 
+                    content: 'My cat learned a new trick! 🐱 She can now high-five on command. So proud!', 
+                    username: 'petparent_mike',
+                    likes: 45
+                },
+                { 
+                    id: '5', 
+                    content: 'Completed a 10k run this morning! Training for my first marathon. 🏃‍♀️ Any tips from experienced runners?', 
+                    username: 'runner_sarah',
+                    likes: 15
+                }
             ]);
         }
     } catch (error) {

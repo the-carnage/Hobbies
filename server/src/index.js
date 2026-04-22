@@ -21,5 +21,5 @@ app.use('/api/posts', postRoutes);
 app.get('/', (req, res) => res.send('Hobbies API is running!'));
 
 app.listen(PORT, () => {
-  console.log(\`Server is running on port \${PORT}\`);
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -1,4 +1,21 @@
 self.__RSC_CSS_MANIFEST={
-  "cssImports": {},
-  "cssModules": {}
+  "cssImports": {
+    "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/layout.js": [
+      "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/globals.css"
+    ]
+  },
+  "cssModules": {
+    "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/page": [
+      "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/globals.css"
+    ],
+    "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/feed/page": [
+      "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/globals.css"
+    ],
+    "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/login/page": [
+      "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/globals.css"
+    ],
+    "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/profile/page": [
+      "/Users/mehebubalom/Desktop/FSD/Hobbies/client/src/app/globals.css"
+    ]
+  }
 }
