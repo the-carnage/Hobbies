@@ -2,15 +2,22 @@
 import { useState } from 'react';
 import { createPost } from '../../services/api';
 
-export default function CreatePostDialog({ onPostCreated }) {
+export default function CreatePostDialog({ session, onPostCreated }) {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handlePost = async () => {
-    if (!content.trim()) {
+    const trimmedContent = content.trim();
+
+    if (!trimmedContent) {
       setError('Please write something before posting!');
+      return;
+    }
+
+    if (trimmedContent.length > 500) {
+      setError('Posts can be up to 500 characters.');
       return;
     }
     
@@ -19,11 +26,16 @@ export default function CreatePostDialog({ onPostCreated }) {
     setSuccess(false);
     
     try {
-      await createPost({ content, userId: 'user123' });
+      const createdPost = await createPost({
+        content: trimmedContent,
+        userId: session.id,
+        username: session.username,
+      });
+
       setContent('');
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-      if (onPostCreated) onPostCreated();
+      if (onPostCreated) onPostCreated(createdPost);
     } catch (err) {
       setError('Failed to create post. Please try again.');
     } finally {
@@ -33,10 +45,16 @@ export default function CreatePostDialog({ onPostCreated }) {
 
   return (
     <div className="create-post">
-      <h3 style={{marginTop: 0}}>✨ Share an update</h3>
+      <div className="composer-header">
+        <span className="avatar small">{session.displayName?.charAt(0)?.toUpperCase() || 'H'}</span>
+        <div>
+          <h3>Share an update</h3>
+          <p>Posting as {session.type === 'visitor' ? session.id : `@${session.username}`}</p>
+        </div>
+      </div>
       
       {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">Post created successfully! 🎉</div>}
+      {success && <div className="success-message">Post published to the feed.</div>}
       
       <textarea 
         placeholder="What's new in your hobby? Share your passion..."
@@ -49,21 +67,23 @@ export default function CreatePostDialog({ onPostCreated }) {
         disabled={loading}
       ></textarea>
       
-      <div style={{display: 'flex', gap: '1rem', justifyContent: 'flex-end', alignItems: 'center'}}>
-        <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>
+      <div className="composer-actions">
+        <span className={content.length > 500 ? 'count danger' : 'count'}>
           {content.length}/500
         </span>
-        <button 
-          style={{background: '#9CA3AF'}} 
+        <button
+          type="button"
+          className="btn-muted"
           disabled={loading}
         >
-          📷 Add Media
+          Add media
         </button>
-        <button 
-          onClick={handlePost} 
+        <button
+          type="button"
+          onClick={handlePost}
           disabled={loading || content.length > 500}
         >
-          {loading ? <span className="loading-spinner"></span> : '🚀 Publish Post'}
+          {loading ? <span className="loading-spinner"></span> : 'Publish post'}
         </button>
       </div>
     </div>

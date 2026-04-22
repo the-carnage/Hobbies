@@ -9,9 +9,11 @@ try {
         // For production environments (Vercel, Render, etc.) where JSON is an env var string
         const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
         credential = admin.credential.cert(serviceAccount);
-    } else {
+    } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GOOGLE_CLOUD_PROJECT || process.env.FIREBASE_CONFIG) {
         // Fallback for local
         credential = admin.credential.applicationDefault();
+    } else {
+        throw new Error('Firebase credentials not configured');
     }
     
     admin.initializeApp({ credential });

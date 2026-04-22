@@ -7,6 +7,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || defaultApiUrl;
 
 export const fetchFeed = async () => {
     const res = await fetch(`${API_URL}/posts/feed`);
+    if (!res.ok) {
+        throw new Error('Unable to fetch feed');
+    }
     return res.json();
 };
 
@@ -16,5 +19,8 @@ export const createPost = async (data) => {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
     });
+    if (!res.ok) {
+        throw new Error('Unable to create post');
+    }
     return res.json();
 };

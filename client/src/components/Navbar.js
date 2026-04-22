@@ -1,53 +1,67 @@
 "use client";
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { clearSession, getSession, sessionChangeEvent } from '../services/session';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [session, setSession] = useState(null);
   
   const isActive = (path) => pathname === path;
+
+  useEffect(() => {
+    const syncSession = () => setSession(getSession());
+
+    syncSession();
+    window.addEventListener('storage', syncSession);
+    window.addEventListener(sessionChangeEvent, syncSession);
+
+    return () => {
+      window.removeEventListener('storage', syncSession);
+      window.removeEventListener(sessionChangeEvent, syncSession);
+    };
+  }, []);
+
+  const handleSignOut = () => {
+    clearSession();
+    window.location.href = '/';
+  };
   
   return (
     <nav className="navbar">
-      <a href="/" style={{textDecoration: 'none'}}>
-        <div className="logo">🌱 Hobbies</div>
-      </a>
+      <Link href="/" className="brand-link">
+        <span className="brand-mark">H</span>
+        <span className="logo">Hobbies</span>
+      </Link>
       <div className="links">
-        <a 
-          href="/" 
-          style={{
-            background: isActive('/') ? 'rgba(79, 70, 229, 0.1)' : 'transparent',
-            color: isActive('/') ? 'var(--primary)' : 'var(--text-main)'
-          }}
-        >
+        <Link href="/" className={isActive('/') ? 'active' : ''}>
           Home
-        </a>
-        <a 
-          href="/feed"
-          style={{
-            background: isActive('/feed') ? 'rgba(79, 70, 229, 0.1)' : 'transparent',
-            color: isActive('/feed') ? 'var(--primary)' : 'var(--text-main)'
-          }}
-        >
-          Feed
-        </a>
-        <a 
-          href="/profile"
-          style={{
-            background: isActive('/profile') ? 'rgba(79, 70, 229, 0.1)' : 'transparent',
-            color: isActive('/profile') ? 'var(--primary)' : 'var(--text-main)'
-          }}
-        >
-          Profile
-        </a>
-        <a 
-          href="/login"
-          style={{
-            background: isActive('/login') ? 'rgba(79, 70, 229, 0.1)' : 'transparent',
-            color: isActive('/login') ? 'var(--primary)' : 'var(--text-main)'
-          }}
-        >
-          Login
-        </a>
+        </Link>
+
+        {session ? (
+          <>
+            <Link href="/feed" className={isActive('/feed') ? 'active' : ''}>
+              Feed
+            </Link>
+            <Link href="/profile" className={isActive('/profile') ? 'active' : ''}>
+              Profile
+            </Link>
+            <span className="session-chip">{session.type === 'visitor' ? session.id : `@${session.username}`}</span>
+            <button type="button" className="nav-button" onClick={handleSignOut}>
+              Sign out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className={isActive('/login') ? 'active' : ''}>
+              Login
+            </Link>
+            <Link href="/register" className="nav-cta">
+              Sign up
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );

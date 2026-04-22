@@ -1,92 +1,111 @@
 "use client";
 import { useState } from 'react';
+import AuthGate from '../../components/AuthGate';
+import { updateSession } from '../../services/session';
 
 export default function Profile() {
+  return (
+    <AuthGate>
+      {(session) => <ProfileExperience session={session} />}
+    </AuthGate>
+  );
+}
+
+function ProfileExperience({ session }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [bio, setBio] = useState('Loves painting and hiking');
-  const [interests, setInterests] = useState('Art, Outdoors');
+  const [bio, setBio] = useState(session.bio || '');
+  const [interests, setInterests] = useState(session.interests || '');
+
+  const handleSave = () => {
+    updateSession({ bio, interests });
+    setIsEditing(false);
+  };
+
+  const joinedDate = session.createdAt
+    ? new Date(session.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+    : 'Today';
 
   return (
-    <div className="profile-page">
-      <div style={{textAlign: 'center', marginBottom: '2rem'}}>
-        <div style={{
-          width: '120px',
-          height: '120px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%)',
-          margin: '0 auto 1rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '3rem',
-          color: 'white'
-        }}>
-          👤
+    <main className="app-page profile-layout">
+      <section className="profile-hero">
+        <div className="profile-avatar">
+          {session.displayName?.charAt(0)?.toUpperCase() || 'H'}
         </div>
-        <h2 style={{margin: '0.5rem 0'}}>@JaneDoe</h2>
-        <p style={{color: 'var(--text-muted)', margin: '0'}}>Member since 2024</p>
-      </div>
-      
-      <div style={{marginBottom: '1.5rem'}}>
-        <h3 style={{marginTop: 0, color: 'var(--primary)'}}>Bio</h3>
-        {isEditing ? (
-          <textarea 
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={3}
-          />
-        ) : (
-          <p style={{color: 'var(--text-main)'}}>{bio}</p>
-        )}
-      </div>
-      
-      <div style={{marginBottom: '1.5rem'}}>
-        <h3 style={{marginTop: 0, color: 'var(--primary)'}}>Interests</h3>
-        {isEditing ? (
-          <input 
-            value={interests}
-            onChange={(e) => setInterests(e.target.value)}
-            placeholder="Comma-separated interests"
-          />
-        ) : (
-          <p style={{color: 'var(--text-main)'}}>{interests}</p>
-        )}
-      </div>
-      
-      <div style={{display: 'flex', gap: '1rem'}}>
-        <button 
-          onClick={() => setIsEditing(!isEditing)}
-          style={{flex: 1}}
-        >
-          {isEditing ? '💾 Save Profile' : '✏️ Edit Profile'}
-        </button>
-        {isEditing && (
-          <button 
-            onClick={() => setIsEditing(false)}
-            style={{flex: 1, background: 'var(--text-muted)'}}
-          >
-            Cancel
-          </button>
-        )}
-      </div>
-      
-      <div style={{marginTop: '2rem', padding: '1rem', background: 'var(--bg)', borderRadius: '8px'}}>
-        <h3 style={{marginTop: 0, fontSize: '1rem'}}>📊 Stats</h3>
-        <div style={{display: 'flex', justifyContent: 'space-around', textAlign: 'center'}}>
-          <div>
-            <p style={{fontSize: '1.5rem', fontWeight: 'bold', margin: '0', color: 'var(--primary)'}}>12</p>
-            <p style={{fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0'}}>Posts</p>
-          </div>
-          <div>
-            <p style={{fontSize: '1.5rem', fontWeight: 'bold', margin: '0', color: 'var(--primary)'}}>48</p>
-            <p style={{fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0'}}>Likes</p>
-          </div>
-          <div>
-            <p style={{fontSize: '1.5rem', fontWeight: 'bold', margin: '0', color: 'var(--primary)'}}>23</p>
-            <p style={{fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0'}}>Following</p>
-          </div>
+        <div>
+          <p className="eyebrow">{session.type === 'visitor' ? 'Visitor profile' : 'Member profile'}</p>
+          <h1>{session.displayName || session.username}</h1>
+          <p>{session.type === 'visitor' ? session.id : `@${session.username}`} - Joined {joinedDate}</p>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section className="profile-content">
+        <div className="profile-card">
+          <div className="card-heading">
+            <h2>About</h2>
+            {!isEditing && (
+              <button type="button" className="btn-secondary compact" onClick={() => setIsEditing(true)}>
+                Edit
+              </button>
+            )}
+          </div>
+
+          <div className="profile-section">
+            <h3>Bio</h3>
+            {isEditing ? (
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                rows={4}
+                placeholder="Tell the community what you enjoy making or learning."
+              />
+            ) : (
+              <p>{bio || 'No bio yet.'}</p>
+            )}
+          </div>
+
+          <div className="profile-section">
+            <h3>Interests</h3>
+            {isEditing ? (
+              <input
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+                placeholder="Comma-separated interests"
+              />
+            ) : (
+              <p>{interests || 'No interests added yet.'}</p>
+            )}
+          </div>
+
+          {isEditing && (
+            <div className="button-row">
+              <button type="button" onClick={handleSave}>
+                Save profile
+              </button>
+              <button type="button" className="btn-muted" onClick={() => setIsEditing(false)}>
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+
+        <aside className="profile-card stats-card">
+          <h2>Activity</h2>
+          <div className="stats-grid">
+            <div>
+              <strong>{session.type === 'visitor' ? '1' : '12'}</strong>
+              <span>Posts</span>
+            </div>
+            <div>
+              <strong>{session.type === 'visitor' ? '0' : '48'}</strong>
+              <span>Likes</span>
+            </div>
+            <div>
+              <strong>{session.type === 'visitor' ? 'Guest' : 'Member'}</strong>
+              <span>Status</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
   );
 }
